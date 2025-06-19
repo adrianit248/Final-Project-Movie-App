@@ -9,11 +9,16 @@ body{
 }
 .movie-container{
   margin: 0 auto;
+  width: 100%;
+  justify-content: center;
 }
 .row{
   width: 100%;
   max-width: 800px;
+  display: flex;
   margin: 0 auto;
+  justify-content: center;
+  align-items: center;
 }
 .movie-row{
   width: 100%;
@@ -21,6 +26,9 @@ body{
   display: flex;
   flex-wrap: wrap;
   margin: 0 auto;
+}
+.movies-section{
+  margin-top: 40px;
 }
 .movie-card{
   width: 25%;
@@ -39,19 +47,46 @@ body{
   margin: 0 auto;
   text-align: center;
 }
+.heading{
+  color: white;
+}
+h1{
+  padding-left: 40px;
+}
+.form{
+  border-radius: 4px;
+  width: 300px;
+}
 .header-bar{
+  display: flex;
   align-items: center;
+  justify-content: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background: url('./banner.png') no-repeat center;
+  background-size: cover;
+  margin: 0 auto;
 }
 .searchbar-assembly{
   display: flex;
   position: relative;
+  padding-right: 40px;
 }
 .magnifying-glass{
   position: absolute;
-  right: 10px;
+  right: 50px;
   top: 10px;
   cursor: pointer;
 }
 .magnifying-glass:hover{
   color: lightslategray;
+}
+.image-container{
+  position: relative;
+  transition: transform 0.2s;
+  border-radius: 5px;
+}
+.image-container:hover{
+  cursor: pointer;
+  transform: scale(1.1);
 }

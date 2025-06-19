@@ -28,17 +28,25 @@ function App() {
   return (
     <div className="movie-container">
 
-      <div className='row header-bar'>
+      <div className='header-bar'>
         <MovieListHeading heading={'Movies'} />
         <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} /> 
       </div>
 
       <div className='movie-row'>
         {/* adding an instance of MovieList below, and passing the props of "movies" into it to be rendered */}
-        <MovieList movies={movies} /> 
+        <MovieList className='movies-section' movies={movies} /> 
       </div>
     </div>
   );
 }
 
 export default App;
+
+
+// stopped at minute 21:47 of https://www.youtube.com/watch?v=jc9_Bqzy2YQ
+// finished needed sections of Youtube video
+// next, complete the following revisions:
+// for the search results, splice the resulting array into a max of 6 movies
+// add "sort" filters for oldest to newest, and newest to oldest
+// when you click on the movie, direct to a dedicated page for that movie's info- add a back button
