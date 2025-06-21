@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { FaSpinner } from "react-icons/fa6";
+import loading_gif from '../loading_gif.gif'
 
 const Movies = (props) => {
 
 //  initialize searchMovie to an empty object, so that it can later
 //  be assigned the object value of the corresponding movie and all
 //  of its components
-    const [searchMovie, setSearchMovie] = useState({})
+    const [movieData, setMovieData] = useState({})
+    const id = useParams()
+    const filmId = id.id
 
+    const [loading, setLoading] = useState(true)
+    
 //  initialize navigate() for use with the back button
-    let navigate = useNavigate()
+    const navigate = useNavigate()
 
 //  on mount, useEffect will call getMovie()
     useEffect(() => {
-        console.log(props.imdbID)
+        console.log(filmId)
+        
         setTimeout(() => {
-            getMovie(props.imdbID)    
+            getMovie(filmId)    
         }, 1000);
     }, [])
 
@@ -26,37 +33,57 @@ const Movies = (props) => {
 //  Searches the API for the specific movie ID, collects the object 
 //  and component values for said ID, and then assigns it all as an 
 //  update to the searchMovie object variable
-    async function getMovie (imdbID) {
-        const url = `http://www.omdbapi.com/?i=${imdbID}&apikey=a7004db5`
+     const getMovie = async (filmId) => {
+        const url = `http://www.omdbapi.com/?i=${filmId}&apikey=a7004db5`
         const response = await axios.get(url)
 
-        setSearchMovie(response)
+        const responseObject = (response.data)
+        console.log(responseObject)
+        {response ? setMovieData(responseObject) : <></>}
+
+        // setMovieData(response)
+        console.log(movieData)
+        setLoading(false)
     }
 
     return (
-        <>
-            <div className="idmovie-container">
-                <div className="idmovie-row">
-                    <div className='idmovie-display'>
-                        <img className='idmovie-poster' src={searchMovie.Poster} alt='movie'></img>
-                        <p className='idmovie-title'>{searchMovie.Title}</p>
-                        <p className='idmovie-rated'>Rating: {searchMovie.Rated}</p>
-                        <p className='idmovie-released'>Released: {searchMovie.Released}</p>
-                        <p className='idmovie-runtime'>Runtime: {searchMovie.Runtime}</p>
-                        <p className='idmovie-genre'>Genre: {searchMovie.Genre}</p>
-                        <p className='idmovie-director'>Director: {searchMovie.Director}</p>
-                        <p className='idmovie-writer'>Writer: {searchMovie.Writer}</p>
-                        <p className='idmovie-actors'>Actors: {searchMovie.Actors}</p>
-                        <p className='idmovie-plot'>Plot: {searchMovie.Plot}</p>
-                        <p className='idmovie-language'>Language: {searchMovie.Language}</p>
-                        <p className='idmovie-country'>Country: {searchMovie.Country}</p>
-                        <p className='idmovie-awards'>Awards: {searchMovie.Awards}</p>
-                        <p className='idmovie-metascore'>Metascore: {searchMovie.Metascore}</p>
-                        <p className='idmovie-boxoffice'>Box Office: {searchMovie.BoxOffice}</p>
+        <div className="idmovie-container-all">
+
+            {loading
+            ?   <div className="loading-spinner-container">
+                    <div className='loading-spinner'><img src={loading_gif} alt="" /></div>
+                </div>
+            :   <div className="full-display">
+                    <button className="back-btn" onClick={() => {navigate('/')}}>← Back</button>
+
+                    <div className="idmovie-container">
+                        <div className="idmovie-row">
+                            <div className='idmovie-display'>
+                                <div className="poster-container">
+                                    <img className='idmovie-poster' src={movieData.Poster} alt='movie'></img>
+                                </div>
+                                <div className='idmovie-info-section'>
+                                    <p className='idmovie-title'>Title: {movieData.Title}</p>
+                                    <p className='idmovie-rated'>Rating: {movieData.Rated}</p>
+                                    <p className='idmovie-released'>Released: {movieData.Released}</p>
+                                    <p className='idmovie-runtime'>Runtime: {movieData.Runtime}</p>
+                                    <p className='idmovie-genre'>Genre: {movieData.Genre}</p>
+                                    <p className='idmovie-director'>Director: {movieData.Director}</p>
+                                    <p className='idmovie-writer'>Writer: {movieData.Writer}</p>
+                                    <p className='idmovie-actors'>Actors: {movieData.Actors}</p>
+                                    <p className='idmovie-plot'>Plot: {movieData.Plot}</p>
+                                    <p className='idmovie-language'>Language: {movieData.Language}</p>
+                                    <p className='idmovie-country'>Country: {movieData.Country}</p>
+                                    <p className='idmovie-awards'>Awards: {movieData.Awards}</p>
+                                    <p className='idmovie-metascore'>Metascore: {movieData.Metascore}</p>
+                                    <p className='idmovie-boxoffice'>Box Office: {movieData.BoxOffice}</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </>
+            }
+        </div>
     )
 };
 

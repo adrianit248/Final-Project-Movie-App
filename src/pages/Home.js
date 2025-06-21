@@ -6,13 +6,16 @@ import MovieListHeading from '../components/MovieListHeading';
 import Searchbox from '../components/Searchbox';
 import { useNavigate, useParams } from 'react-router-dom';
 import { render } from '@testing-library/react';
+import loading_gif from '../loading_gif.gif'
 
-function Home(props) {
+
+function Home(props, idVal, setIdVal) {
 let navigate = useNavigate();
 const { id } = useParams();
+const [loading, setLoading] = useState(false)
   
   const [movies, setMovies] = useState([])
-  const [searchValue, setSearchValue] = useState('')
+  const [searchValue, setSearchValue] = useState('cat')
 
 //  filters movies based on an onChange event in the corresponding select element
   function filterMovies(filter) {
@@ -32,18 +35,23 @@ const { id } = useParams();
     function renderMovies()  {
         return (
             <>
-                {movies.map((movie) => 
-                    <div className='movie-card image-container' key={movie.imdbID}
-                    onClick={() => {
-                        navigate(`/${movie.imdbID}`);
-                        }}
-                >
-                        <img className='movie-poster' src={movie.Poster} alt='movie'></img>
-                        <p className='movie-title'>{movie.Title}</p>
-                        <p className='movie-title'>Released: {movie.Year}</p>
-                        <p className='movie-id'>ID: {movie.imdbID}</p>
+                {loading
+                ?   <div className="loading-spinner-container">
+                        <div className='loading-spinner'><img src={loading_gif} alt="" /></div>
                     </div>
-                )}
+                :   <>
+                        {movies.map((movie) => 
+                            <div className='movie-card image-container' key={movie.imdbID}
+                            onClick={() => {navigate(`/${movie.imdbID}`)}}
+                            >
+                                <img className='movie-poster' src={movie.Poster} alt='movie'></img>
+                                <p className='movie-title'>{movie.Title}</p>
+                                <p className='movie-title'>Released: {movie.Year}</p>
+                            </div>
+                        )}
+                    </>
+                
+                }
             </>
         )
     }
@@ -51,13 +59,20 @@ const { id } = useParams();
 //  whenever the search value is changed / you click the Magnifying Glass or hit ENTER it will parse the new search
 //  after the search is parsed with your new search critera, the new search result array is passed on to be rendered
     const getMovieRequest = async (searchValue) => {
+
+        setLoading(true)
+
         const url = `http://www.omdbapi.com/?s=${searchValue}&apikey=a7004db5`
 
         const response = await axios.get(url)
-        
+
         const responseArray = (response.data.Search).slice(0,6)
 
-        {response.data.Search ? setMovies(responseArray) : <></>}
+        setTimeout(() => {
+            {response.data.Search ? setMovies(responseArray) : <></>}  
+        }, 1000);
+
+        setLoading(false)
 
         renderMovies(movies)
         

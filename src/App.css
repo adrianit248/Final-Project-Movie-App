@@ -4,7 +4,7 @@
   padding: 0;
 }
 body{
-  background-color: #141414;
+  background: #141414;
   color: #ffffff;
 }
 .movie-container{
@@ -100,12 +100,52 @@ select{
 .idmovie-container{
   height: 100%;
   width: 100%;
+  display: flex;
+}
+.idmovie-container-all{
+}
+.back-btn{
+  margin-top: 20px;
+  margin-left: 20px;
+  padding: 12px 20px;
+  background: lightgray;
 }
 .idmovie-row{
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 .idmovie-display{
-  background: gray;
+  display: flex;
+  width: 100%;
+}
+.poster-container{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.idmovie-poster{
+  width: 80%;
+  margin-bottom: 75px;
+}
+.idmovie-info-section{
+  width: 100%;
+  margin-top: 10px;
+  font-size: 16px;
+}
+.loading-spinner-container{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.loading-spinner{
+  margin: 0 auto;
+}
+.full-display{
+  height: 100%;
+  margin-bottom: 50px;
 }
