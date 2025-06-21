@@ -65,7 +65,7 @@ h1{
   padding-bottom: 40px;
   background: url('./banner.png') no-repeat center;
   background-size: cover;
-  margin: 0 auto;
+  margin-bottom: 20px;
 }
 .searchbar-assembly{
   display: flex;
@@ -89,4 +89,23 @@ h1{
 .image-container:hover{
   cursor: pointer;
   transform: scale(1.1);
+}
+.filter-container{
+  margin-bottom: 20px;
+  margin-left: 20px;
+}
+select{
+  border-radius: 4px;
+}
+.idmovie-container{
+  height: 100%;
+  width: 100%;
+}
+.idmovie-row{
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.idmovie-display{
+  background: gray;
 }
