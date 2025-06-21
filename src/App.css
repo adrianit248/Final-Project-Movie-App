@@ -123,17 +123,18 @@ select{
   width: 100%;
   height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 .idmovie-poster{
   width: 80%;
-  margin-bottom: 75px;
 }
 .idmovie-info-section{
   width: 100%;
-  margin-top: 10px;
   font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .loading-spinner-container{
   height: 100%;
@@ -143,7 +144,10 @@ select{
   align-items: center;
 }
 .loading-spinner{
-  margin: 0 auto;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  margin-top: 10%;
 }
 .full-display{
   height: 100%;
