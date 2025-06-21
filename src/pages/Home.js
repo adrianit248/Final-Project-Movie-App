@@ -10,31 +10,90 @@ import loading_gif from '../loading_gif.gif'
 
 
 function Home(props, idVal, setIdVal) {
-let navigate = useNavigate();
-const { id } = useParams();
-const [loading, setLoading] = useState(false)
-  
-  const [movies, setMovies] = useState([])
-  const [searchValue, setSearchValue] = useState('cat')
+    let navigate = useNavigate();
+    const { id } = useParams();
+    const [loading, setLoading] = useState(false) 
+    const [movies, setMovies] = useState([])
+    const [searchValue, setSearchValue] = useState('')
 
-//  filters movies based on an onChange event in the corresponding select element
-  function filterMovies(filter) {
 
+    //  any time the search value is changed (by initiating a search) getMovieRequest parses th search and returns results
+    useEffect(() => {
+        const searchLength = searchValue.length
+
+        {searchValue !== '' ? (searchLength > 2 ? getMovieRequest(searchValue) : alert('Not enough text. Please refine your search')) : <></>}
+    }, [searchValue])
+
+
+    //  whenever the search value is changed / you click the Magnifying Glass or hit ENTER it will parse the new search.
+    //  After the search is parsed with your new search critera, the new search result array is passively rendered
+    const getMovieRequest = async (searchValue) => {
+
+        // By setting loading to true, it will activate the spinner wheel loading state
+        setLoading(true)
+
+        // Now it makes the awaited API call and unlocks the promise
+        const url = `http://www.omdbapi.com/?s=${searchValue}&apikey=a7004db5`
+        const response = await axios.get(url)
+
+        // the unlocked array is further refined to reference the direct values,
+        // sliced into 6 elements, and stored in a final responseArray variable
+        const responseArray = (response.data.Search).slice(0,6)
+
+        // As long as the data exists (it should reliably exist due to conditional ternary
+        // operators that dictated the search criteria), the movies array will be updated based
+        // on the parsed search results
+        {response.data.Search ? setMovies(responseArray) : <></>}
+
+        // The loading spinner wheel is allotted 1 full second regardless to express a mock
+        // loading state
+        setTimeout(() => {
+            setLoading(false)
+        }, 1000);
+    }
+
+
+    //  filters movies based on an onChange event in the corresponding select element
+    function filterMovies(filter) {
         if (filter === "OLDEST_TO_NEWEST") {
             setMovies(movies.slice().sort((a, b) => (a.Year) - (b.Year)))
         }
         if (filter === "NEWEST_TO_OLDEST") {
             setMovies(movies.slice().sort((a, b) => (b.Year) - (a.Year)))
         }
-
-        renderMovies(movies)
-
     }
 
-//  renders movies either on a triggered change to the search value or by clicking on a filter value
-    function renderMovies()  {
-        return (
-            <>
+
+    //  The HTML elements / visual representation
+    return (
+        <div className="movie-container">
+        
+            {/* The header section at the top of the page */}
+            <div className='header-bar'>
+                <MovieListHeading heading={'Movies'} />
+                <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} /> 
+            </div>
+
+            {/* The search filter below the header / above the movie search results */}
+            <div className="filter-container"> 
+                <select defaultValue={'Sort By:'} className="sortFilter" 
+                onChange={(event) => filterMovies(event.target.value)}
+                >
+                    <option disabled>Sort By:</option>
+                    <option value="OLDEST_TO_NEWEST" >
+                        Oldest to Newest
+                    </option>
+                    <option value="NEWEST_TO_OLDEST" >
+                        Newest to Oldest
+                    </option>
+                </select>  
+            </div>
+
+            {/* The movie row div is used to style / structure the layout of the movie results */}
+
+            {/* The bracketed section encompasses all of what is displayed in the movie search results
+                and its dynamic expression is dependent on output from the movies array */}
+            <div className='movie-row'>
                 {loading
                 ?   <div className="loading-spinner-container">
                         <div className='loading-spinner'><img src={loading_gif} alt="" /></div>
@@ -50,87 +109,10 @@ const [loading, setLoading] = useState(false)
                             </div>
                         )}
                     </>
-                
                 }
-            </>
-        )
-    }
-
-//  whenever the search value is changed / you click the Magnifying Glass or hit ENTER it will parse the new search
-//  after the search is parsed with your new search critera, the new search result array is passed on to be rendered
-    const getMovieRequest = async (searchValue) => {
-
-        setLoading(true)
-
-        const url = `http://www.omdbapi.com/?s=${searchValue}&apikey=a7004db5`
-
-        const response = await axios.get(url)
-
-        const responseArray = (response.data.Search).slice(0,6)
-
-        setTimeout(() => {
-            {response.data.Search ? setMovies(responseArray) : <></>}  
-        }, 1000);
-
-        setLoading(false)
-
-        renderMovies(movies)
-        
-    }
-
-
-//  any time the search value is changed (by initiating a search) getMovieRequest parses th search and returns results
-    useEffect(() => {
-        setTimeout(() => {
-            getMovieRequest(searchValue)
-        }, 1000);
-    }, [searchValue])
-
-
-//  The HTML elements / visual representation
-    return (
-        <div className="movie-container">
-        
-{/* The header section at the top of the page */}
-
-            <div className='header-bar'>
-                <MovieListHeading heading={'Movies'} />
-                <Searchbox searchValue={searchValue} setSearchValue={setSearchValue} /> 
-            </div>
-
-{/* The search filter below the header / above the movie search results */}
-
-            <div className="filter-container"> 
-                <select defaultValue={'Sort By:'} className="sortFilter" 
-                onChange={(event) => filterMovies(event.target.value)}
-                >
-                    <option disabled>Sort By:</option>
-                    <option value="OLDEST_TO_NEWEST" >
-                        Oldest to Newest
-                    </option>
-                    <option value="NEWEST_TO_OLDEST" >
-                        Newest to Oldest
-                    </option>
-                </select>  
-            </div>
-
-{/* The movie row div is used to style / structure the layout of the movie results */}
-
-{/* The bracketed section encompasses all of what is displayed in the movie search results
-    and its dynamic expression is dependent on output from the renderMovies() function call */}
-            <div className='movie-row'>
-                {renderMovies()}
             </div>
         </div>
     );
 }
 
 export default Home;
-
-
-// stopped at minute 21:47 of https://www.youtube.com/watch?v=jc9_Bqzy2YQ
-// finished needed sections of Youtube video
-// next, complete the following revisions:
-// for the search results, splice the resulting array into a max of 6 movies
-// add "sort" filters for oldest to newest, and newest to oldest
-// when you click on the movie, direct to a dedicated page for that movie's info- add a back button

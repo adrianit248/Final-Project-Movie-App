@@ -6,19 +6,19 @@ import loading_gif from '../loading_gif.gif'
 
 const Movies = (props) => {
 
-//  initialize searchMovie to an empty object, so that it can later
-//  be assigned the object value of the corresponding movie and all
-//  of its components
+    //  initialize searchMovie to an empty object, so that it can later
+    //  be assigned the object value of the corresponding movie and all
+    //  of its components
     const [movieData, setMovieData] = useState({})
     const id = useParams()
     const filmId = id.id
 
     const [loading, setLoading] = useState(true)
     
-//  initialize navigate() for use with the back button
+    //  initialize navigate() for use with the back button
     const navigate = useNavigate()
 
-//  on mount, useEffect will call getMovie()
+    //  on mount, useEffect will call getMovie()
     useEffect(() => {
         console.log(filmId)
         
@@ -27,12 +27,12 @@ const Movies = (props) => {
         }, 1000);
     }, [])
 
-//  (Receiving the ID as a passed prop from useEffect on mount- and 
-//  which is tied to a passed value from the Home page onClick)
-//
-//  Searches the API for the specific movie ID, collects the object 
-//  and component values for said ID, and then assigns it all as an 
-//  update to the searchMovie object variable
+    //  (Receiving the ID as a passed prop from useEffect on mount- and 
+    //  which is tied to a passed value from the Home page onClick)
+
+    //  Searches the API for the specific movie ID, collects the object 
+    //  and component values for said ID, and then assigns it all as an 
+    //  update to the searchMovie object variable
      const getMovie = async (filmId) => {
         const url = `http://www.omdbapi.com/?i=${filmId}&apikey=a7004db5`
         const response = await axios.get(url)
